@@ -20,4 +20,17 @@
         android:text="Hola"
         android:id="@+id/botonPrueba"
         android:layout_below="@id/imagenPrueba"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Camara"
+        android:id="@+id/botonCamara"
+        android:layout_below="@id/botonPrueba"
+        />
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_below="@id/botonCamara"></Spinner>
 </RelativeLayout>
