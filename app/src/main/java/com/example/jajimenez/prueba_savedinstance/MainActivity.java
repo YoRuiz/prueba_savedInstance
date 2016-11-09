@@ -21,6 +21,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button botonCamara;
     Spinner lista;
     ArrayList<String> opciones = new ArrayList<String>();
+
+    //primera llamada de la actividad en la que tiene seleccionado un item del spinner
+    boolean primeraLlamada = true;
+
+    //imagen cargada o no, es el estado de la imagen true -> cargada, false  -> no
+    boolean imagenCargada = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lista.setOnItemSelectedListener(this);
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, opciones);
         lista.setAdapter(spinnerArrayAdapter);
-
     }
 
 
@@ -63,29 +69,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+    //método para hacer switch con el botón que enseña el escudo
     public void onClickBoton1(){
-        imagen.setImageDrawable(getResources().getDrawable(R.drawable.thunder));
+        if(!imagenCargada) {
+            imagen.setImageDrawable(getResources().getDrawable(R.drawable.thunder));
+        }else{
+
+            imagen.setImageDrawable(null);
+        }
+        imagenCargada=!imagenCargada;
     }
-
-    //método que abre google maps
-    public void onClickBoton2() {
-
-        Uri gmmIntentUri = Uri.parse("geo:37.473708, -5.651173");
-
-// Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-// Make the Intent explicit by setting the Google Maps package
-        //en español, esta línea obliga a abrir con google maps
-
-        //mapIntent.setPackage("com.google.android.apps.maps");
-
-// Attempt to start an activity that can handle the Intent
-        startActivity(mapIntent);
-    }
+    //método que abre la cámara
     public void onClickBoton3(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivity(takePictureIntent);
     }
+    //método sobreescrito para conservar el imageview del escudo abierto
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -98,19 +97,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String opcion = opciones.get(position);
+        if(!primeraLlamada) {
 
-        Uri gmmIntentUri = Uri.parse("geo:37.473708, -5.651173?q="+opcion);
+            String opcion = opciones.get(position);
+
+            Uri gmmIntentUri = Uri.parse("geo:37.473708, -5.651173?q=" + opcion);
 
 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 // Make the Intent explicit by setting the Google Maps package
-        //en español, esta línea obliga a abrir con google maps
+            //en español, esta línea obliga a abrir con google maps
 
-        //mapIntent.setPackage("com.google.android.apps.maps");
+            //mapIntent.setPackage("com.google.android.apps.maps");
 
 // Attempt to start an activity that can handle the Intent
-        startActivity(mapIntent);
+            startActivity(mapIntent);
+        }
+        primeraLlamada = false;
     }
 
     @Override
